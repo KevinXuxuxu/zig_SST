@@ -1,5 +1,8 @@
 const std = @import("std");
 
+// A data structure that supports queries q, returning the smallest element
+// of vals that is at least q, or u32::MAX if no such element exists.
+
 pub fn queryOne(comptime Impl: type, self: *const Impl, target: i32) i32 {
     if (@hasDecl(Impl, "queryOne")) return Impl.queryOne(self, target);
     const single: [1]i32 = .{target};

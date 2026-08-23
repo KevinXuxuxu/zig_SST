@@ -1,5 +1,6 @@
 // zig run gen.zig -- 100000 &> data.txt
 const std = @import("std");
+const utils = @import("utils.zig");
 
 pub fn main() !void {
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
@@ -17,16 +18,8 @@ pub fn main() !void {
     const n = try std.fmt.parseInt(usize, args[1], 10);
     std.debug.print("{d}\n", .{n});
 
-    const nums = try allocator.alloc(i32, n);
+    const nums = try utils.genRandI32Nums(n, allocator);
     defer allocator.free(nums);
-
-    var prng = std.Random.DefaultPrng.init(blk: {
-        var seed: u64 = undefined;
-        try std.posix.getrandom(std.mem.asBytes(&seed));
-        break :blk seed;
-    });
-    const rand = prng.random();
-    for (nums) |*x| x.* = rand.intRangeAtMost(i32, std.math.minInt(i32), std.math.maxInt(i32));
 
     std.mem.sort(i32, nums, {}, std.sort.asc(i32));
     for (nums) |x| std.debug.print("{d}\n", .{x});

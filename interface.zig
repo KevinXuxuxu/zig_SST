@@ -11,11 +11,19 @@ pub fn queryOne(comptime Impl: type, self: *const Impl, target: i32) i32 {
     return out[0];
 }
 
-pub fn query(comptime Impl: type, self: *const Impl, queries: []const i32, out: []i32) void {
+pub fn query(comptime Impl: type, self: *const Impl, queries: []const i32, out: *[]i32) void {
     if (@hasDecl(Impl, "query")) {
         return Impl.query(self, queries, out);
     }
-    for (queries, out) |q, *o| o.* = queryOne(Impl, self, q);
+    for (queries, out.*) |q, *o| o.* = queryOne(Impl, self, q);
+}
+
+pub const AlgoTag = enum { bs };
+
+pub fn getAlgo(comptime tag: AlgoTag) type {
+    return switch (tag) {
+        .bs => @import("bs_baseline.zig").BinSearch,
+    };
 }
 
 test "interface instantiation" {

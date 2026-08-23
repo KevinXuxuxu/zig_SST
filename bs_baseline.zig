@@ -11,7 +11,7 @@ pub const BinSearch = struct {
         return std.math.order(a, b);
     }
 
-    pub fn query_one(self: *const @This(), target: i32) i32 {
+    pub fn queryOne(self: *const @This(), target: i32) i32 {
         const idx = std.sort.lowerBound(i32, self.data, target, i32Order);
         if (idx < self.data.len) return self.data[idx];
         return std.math.maxInt(i32);

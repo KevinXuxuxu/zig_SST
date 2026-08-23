@@ -18,11 +18,12 @@ pub fn query(comptime Impl: type, self: *const Impl, queries: []const i32, out: 
     for (queries, out.*) |q, *o| o.* = queryOne(Impl, self, q);
 }
 
-pub const AlgoTag = enum { bs };
+pub const AlgoTag = enum { bs, ezgr };
 
 pub fn getAlgo(comptime tag: AlgoTag) type {
     return switch (tag) {
         .bs => @import("bs_baseline.zig").BinSearch,
+        .ezgr => @import("eytzinger.zig").Eytzinger,
     };
 }
 

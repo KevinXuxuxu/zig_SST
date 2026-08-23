@@ -8,7 +8,8 @@ fn bench(algo_name: []const u8, data: []const i32, n: usize, allocator: std.mem.
     switch (tag) {
         inline else => |t| {
             const Algo = searchInt.getAlgo(t);
-            const index = Algo.init(data);
+            const index = try Algo.init(data, allocator);
+            defer index.deinit(allocator);
 
             const queries = try utils.genRandI32Nums(n, allocator);
             defer allocator.free(queries);

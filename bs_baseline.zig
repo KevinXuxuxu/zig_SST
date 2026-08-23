@@ -3,9 +3,11 @@ const std = @import("std");
 pub const BinSearch = struct {
     data: []const i32,
 
-    pub fn init(data: []const i32) BinSearch {
+    pub fn init(data: []const i32, _: std.mem.Allocator) !BinSearch {
         return .{ .data = data };
     }
+
+    pub fn deinit(_: *const @This(), _: std.mem.Allocator) void {}
 
     fn i32Order(a: i32, b: i32) std.math.Order {
         return std.math.order(a, b);
